@@ -1,27 +1,19 @@
 package utils.steps;
 
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.assertj.core.api.Assertions;
-import org.jspecify.annotations.Nullable;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pages.LoginPage;
 import utils.ConfigurationReader;
-import utils.Pages;
 import utils.WebDriverManager;
 
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.time.Duration;
-import java.util.List;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoginSteps extends BaseStep {
     private static final Logger log = LoggerFactory.getLogger(LoginSteps.class);
@@ -33,6 +25,14 @@ public class LoginSteps extends BaseStep {
         String URL = ConfigurationReader.getProperty("URL");
         WebDriverManager.getDriver().get(URL);
         PAGES.loginPage().login(username,password);
+    }
+
+    @Given("The user copy pastes and insert in both fields")
+    public void copyPaste() throws InterruptedException, IOException, UnsupportedFlavorException {
+        log.info("Navigating to the login page");
+        String URL = ConfigurationReader.getProperty("URL");
+        WebDriverManager.getDriver().get(URL);
+        PAGES.loginPage().checkCopyPaste();
     }
 
 

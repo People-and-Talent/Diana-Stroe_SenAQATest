@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +12,11 @@ import utils.BasePage;
 import utils.WebDriverManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.time.Duration;
 
 import static java.lang.Thread.sleep;
@@ -38,15 +44,14 @@ public class LoginPage extends BasePage {
     @FindBy(xpath="//*[@id=\"dashboard\"]/div/feed-container/div[1]/h2")
     WebElement home;
 
+    @FindBy(xpath="//div//h1")
+    WebElement pageHeader;
 
     //Methods
     public void login(String username, String password) throws InterruptedException {
         emailTextBox.sendKeys(username);
-        Thread.sleep(3000);
         passTextBox.sendKeys(password);
-        Thread.sleep(3000);
         submitBtn.click();
-        Thread.sleep(3000);
 
     }
 
@@ -56,6 +61,15 @@ public class LoginPage extends BasePage {
 
     public void checkLoginErrorMessage(){
         assertThat(errorAlert.isDisplayed());
+    }
+
+    public void checkCopyPaste() throws IOException, UnsupportedFlavorException {
+        pageHeader.getDomAttribute("text");
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Clipboard clipboard = toolkit.getSystemClipboard();
+        String actualCopiedText = (String) clipboard.getData(DataFlavor.stringFlavor);
+        emailTextBox.sendKeys(actualCopiedText);
+        passTextBox.sendKeys(actualCopiedText);
     }
 
 
